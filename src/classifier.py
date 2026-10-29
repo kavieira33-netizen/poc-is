@@ -149,12 +149,13 @@ def classify_article(article):
     else:
         justification = "Não selecionado: evidência insuficiente de eficácia às áreas configuradas."
         
+   
     return {
         **article,
-        "pontuação_de_relevância": overall_score,
-        "pontuação_de_engenharia_de_software": software_score,
-        "pontuação_de_sistemas_inteligentes": intelligent_score,
-        "tópicos_correspondentes": topics,
+        "relevance_score": overall_score,
+        "software_engineering_score": software_score,
+        "intelligent_systems_score": intelligent_score,
+        "matched_topics": topics,
         "justification": justification,
-        "incluído": relevant,
+        "included": relevant,
     }
