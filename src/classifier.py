@@ -15,6 +15,20 @@ SOFTWARE_TERMS = {
     "integração contínua": 1.0,
     "arquitetura de software": 1.5,
     "reparo de programa": 1.5,
+    "software engineering": 2.0,
+    "software testing": 2.0,
+    "software maintenance": 2.0,
+    "requirements engineering": 2.0,
+    "program analysis": 1.5,
+    "bug detection": 1.5,
+    "software verification": 1.5,
+    "code generation": 1.0,
+    "software development": 1.0,
+    "programming languages": 1.0,
+    "continuous integration": 1.0,
+    "software architecture": 1.5,
+    "program repair": 1.5,
+
 }
 
 INTELLIGENT_TERMS = {
@@ -34,6 +48,21 @@ INTELLIGENT_TERMS = {
     "linguagem visual": 1.5,
     "agentes de IA": 1.5,
     "agente inteligente": 1.5,
+    "intelligent agents": 2.0,
+    "vision-language agents": 2.0,
+    "multi-agent systems": 2.0,
+    "intelligent systems": 2.0,
+    "knowledge representation": 1.5,
+    "automated planning": 1.5,
+    "machine learning": 1.5,
+    "reasoning": 1.0,
+    "autonomous systems": 1.5,
+    "artificial intelligence": 1.0,
+    "neural networks": 1.0,
+    "reinforcement learning": 1.5,
+    "large language models": 1.5,
+    "vision-language": 1.5,
+    "AI agents": 1.5,
 }
 
 SOFTWARE_CATEGORIES = {"cs.SE", "cs.PL"}
@@ -119,7 +148,8 @@ def classify_article(article):
     relevant = bool(topics) and (
         software_score >= 1.5 or intelligent_score >= 1.5
     )
-    
+        if not relevant:
+        logger.debug("Artigo rejeitado: score=%s, tópicos=%s", overall_score, topics)
     explanations = []
     if software_title:
         explanations.append("o título contém conceitos de Engenharia de Software: " + ", ".join(software_title))
