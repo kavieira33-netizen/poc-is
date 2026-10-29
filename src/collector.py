@@ -42,6 +42,8 @@ def collect_articles():
     response.raise_for_status()
 
     feed = feedparser.parse(response.content)
+    logger.info("Articles received from arXiv: %d", len(feed.entries))
+    
     cutoff = datetime.now(timezone.utc) - timedelta(
         days=LOOKBACK_DAYS
     )
