@@ -146,7 +146,7 @@ def classify_article(article):
     # O monitor geral includes artigos relevantes para ambas as áreas.
     # A etiqueta de intersecção requer evidências para ambas as áreas.
     relevant = bool(topics) and (
-        relevant = bool(topics) and overall_score >= 2.0
+    relevant = bool(topics) and overall_score >= 2.0
     )
     explanations = []
     if software_title:
