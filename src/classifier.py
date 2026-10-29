@@ -39,10 +39,8 @@ INTELLIGENT_TERMS = {
     "representação do conhecimento": 1.5,
     "planejamento automatizado": 1.5,
     "aprendizado de máquina": 1.5,
-    "raciocínio": 1.0,
     "sistemas autônomos": 1.5,
     "inteligência artificial": 1.0,
-    "redes neurais": 1.0,
     "aprendizagem por reforço": 1.5,
     "grandes modelos de linguagem": 1.5,
     "linguagem visual": 1.5,
@@ -55,14 +53,14 @@ INTELLIGENT_TERMS = {
     "knowledge representation": 1.5,
     "automated planning": 1.5,
     "machine learning": 1.5,
-    "reasoning": 1.0,
     "autonomous systems": 1.5,
     "artificial intelligence": 1.0,
-    "neural networks": 1.0,
     "reinforcement learning": 1.5,
     "large language models": 1.5,
     "vision-language": 1.5,
     "AI agents": 1.5,
+    "agentes autônomos": 2.0,
+    "autonomous agents": 2.0,
 }
 
 SOFTWARE_CATEGORIES = {"cs.SE", "cs.PL"}
@@ -131,10 +129,9 @@ def classify_article(article):
     )
     
     overall_score = round(
-        5 * (0.5 * software_strength + 0.5 * intelligent_strength),
-        1,
-    )
-    
+    max(software_score, intelligent_score),
+    1,
+)    
     topics = []
     if software_strength >= 0.30:
         topics.append("software_engineering")
