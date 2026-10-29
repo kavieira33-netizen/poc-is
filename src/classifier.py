@@ -123,7 +123,7 @@ def classify_article(article):
     software_score = round(5 * software_strength, 1)
     intelligent_score = round(5 * intelligent_strength, 1)
     
-       topics = []
+    topics = []
 
     if software_strength >= 0.30:
         topics.append("software_engineering")
