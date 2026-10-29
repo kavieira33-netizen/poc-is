@@ -123,21 +123,21 @@ def classify_article(article):
     software_score = round(5 * software_strength, 1)
     intelligent_score = round(5 * intelligent_strength, 1)
     
-   topics = []
+       topics = []
 
-if software_strength >= 0.30:
-    topics.append("software_engineering")
+    if software_strength >= 0.30:
+        topics.append("software_engineering")
 
-if intelligent_strength >= 0.30:
-    topics.append("intelligent_systems")
+    if intelligent_strength >= 0.30:
+        topics.append("intelligent_systems")
 
-intersection = (
-    "software_engineering" in topics
-    and "intelligent_systems" in topics
-)
+    intersection = (
+        "software_engineering" in topics
+        and "intelligent_systems" in topics
+    )
 
-if intersection:
-    topics.append("intersection")
+    if intersection:
+        topics.append("intersection")
         
     # O monitor geral includes artigos relevantes para ambas as áreas.
     # A etiqueta de intersecção requer evidências para ambas as áreas.
