@@ -1,0 +1,260 @@
+[
+  {
+    "arxiv_id": "TEST-FICTICIO-001",
+    "title": "Mutation Testing Strategies for Microservice Architectures",
+    "authors": [
+      "Ana Ribeiro",
+      "Lucas Mendes"
+    ],
+    "abstract": "This fictional study compares mutation testing strategies for microservice architectures. It measures fault detection, test suite effectiveness, and maintenance cost across several software projects.",
+    "published_at": "2026-10-20T10:00:00+00:00",
+    "updated_at": "2026-10-20T10:00:00Z",
+    "categories": [
+      "cs.SE"
+    ],
+    "url": "https://example.org/fictitious/001",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "software_engineering"
+    ],
+    "test_case": "Engenharia de Software clara"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-002",
+    "title": "Requirements Engineering for Safety-Critical Information Systems",
+    "authors": [
+      "Marina Costa",
+      "Peter Hall"
+    ],
+    "abstract": "We present a requirements engineering method using traceability matrices, stakeholder validation, and change-impact analysis. The evaluation focuses on requirement completeness and consistency.",
+    "published_at": "2026-10-20T11:00:00+00:00",
+    "updated_at": "2026-10-20T11:00:00Z",
+    "categories": [
+      "cs.SE"
+    ],
+    "url": "https://example.org/fictitious/002",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "software_engineering"
+    ],
+    "test_case": "Engenharia de requisitos"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-003",
+    "title": "Automated Program Repair Using Constraint-Guided Search",
+    "authors": [
+      "Ravi Shah",
+      "Elena Torres"
+    ],
+    "abstract": "The approach repairs software defects by generating candidate patches, running regression tests, and ranking repairs according to correctness and maintainability.",
+    "published_at": "2026-10-20T12:00:00+00:00",
+    "updated_at": "2026-10-20T12:00:00Z",
+    "categories": [
+      "cs.SE",
+      "cs.PL"
+    ],
+    "url": "https://example.org/fictitious/003",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "software_engineering"
+    ],
+    "test_case": "Reparo automático de software"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-004",
+    "title": "Deep Reinforcement Learning for Autonomous Warehouse Robots",
+    "authors": [
+      "Joana Lima",
+      "Wei Chen"
+    ],
+    "abstract": "This fictional paper trains an autonomous robot policy with deep reinforcement learning. Simulation experiments evaluate navigation, obstacle avoidance, and transfer to a physical warehouse.",
+    "published_at": "2026-10-20T13:00:00+00:00",
+    "updated_at": "2026-10-20T13:00:00Z",
+    "categories": [
+      "cs.AI",
+      "cs.RO"
+    ],
+    "url": "https://example.org/fictitious/004",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "intelligent_systems"
+    ],
+    "test_case": "Sistemas Inteligentes clara"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-005",
+    "title": "Knowledge Graph Reasoning for Clinical Decision Support",
+    "authors": [
+      "Sofia Almeida",
+      "Daniel Brooks"
+    ],
+    "abstract": "We propose a knowledge representation and reasoning method over a clinical knowledge graph. The system combines symbolic rules with learned embeddings to rank possible decision paths.",
+    "published_at": "2026-10-20T14:00:00+00:00",
+    "updated_at": "2026-10-20T14:00:00Z",
+    "categories": [
+      "cs.AI"
+    ],
+    "url": "https://example.org/fictitious/005",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "intelligent_systems"
+    ],
+    "test_case": "Representação do conhecimento"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-006",
+    "title": "Multi-Agent Planning for Dynamic Traffic Signal Control",
+    "authors": [
+      "Pedro Nunes",
+      "Aisha Khan"
+    ],
+    "abstract": "Multiple autonomous agents coordinate traffic signal timing using multi-agent planning and reinforcement learning. The evaluation measures congestion and travel time in a simulated city.",
+    "published_at": "2026-10-20T15:00:00+00:00",
+    "updated_at": "2026-10-20T15:00:00Z",
+    "categories": [
+      "cs.MA",
+      "cs.AI"
+    ],
+    "url": "https://example.org/fictitious/006",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "intelligent_systems"
+    ],
+    "test_case": "Sistemas multiagentes"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-007",
+    "title": "AI-Assisted Code Review with Explainable Defect Detection",
+    "authors": [
+      "Clara Souza",
+      "Mark Evans"
+    ],
+    "abstract": "We evaluate an AI-assisted code review tool that identifies defects, suggests patches, and explains findings to developers. The study measures precision, developer acceptance, and review time in software repositories.",
+    "published_at": "2026-10-20T16:00:00+00:00",
+    "updated_at": "2026-10-20T16:00:00Z",
+    "categories": [
+      "cs.SE",
+      "cs.AI"
+    ],
+    "url": "https://example.org/fictitious/007",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "software_engineering",
+      "intelligent_systems",
+      "intersection"
+    ],
+    "test_case": "Interseção das duas áreas"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-008",
+    "title": "Large Language Model Agents for Test Case Generation and Bug Localization",
+    "authors": [
+      "Nina Patel",
+      "Rafael Oliveira"
+    ],
+    "abstract": "This fictional work uses large language model agents to generate software test cases, localize bugs, and propose program repairs. Results are evaluated against existing software testing baselines.",
+    "published_at": "2026-10-20T17:00:00+00:00",
+    "updated_at": "2026-10-20T17:00:00Z",
+    "categories": [
+      "cs.SE",
+      "cs.AI"
+    ],
+    "url": "https://example.org/fictitious/008",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "software_engineering",
+      "intelligent_systems",
+      "intersection"
+    ],
+    "test_case": "Interseção por testes e agentes"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-009",
+    "title": "A Survey of Reasoning About Public Policy",
+    "authors": [
+      "Beatriz Melo",
+      "Omar Reed"
+    ],
+    "abstract": "This fictional social science survey discusses reasoning about public policy, institutions, and public administration. It does not develop artificial intelligence methods or software engineering techniques.",
+    "published_at": "2026-10-20T18:00:00+00:00",
+    "updated_at": "2026-10-20T18:00:00Z",
+    "categories": [
+      "cs.CY"
+    ],
+    "url": "https://example.org/fictitious/009",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": false,
+    "expected_topics": [],
+    "test_case": "Falso positivo: palavra reasoning fora de IA"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-010",
+    "title": "Neural Networks for Predicting Rainfall in Coastal Regions",
+    "authors": [
+      "Lia Ferreira",
+      "Sam Wilson"
+    ],
+    "abstract": "We compare neural network architectures for rainfall prediction using meteorological observations. The work focuses on forecast accuracy and climate patterns, not intelligent agents or software engineering.",
+    "published_at": "2026-10-20T19:00:00+00:00",
+    "updated_at": "2026-10-20T19:00:00Z",
+    "categories": [
+      "physics.ao"
+    ],
+    "url": "https://example.org/fictitious/010",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": false,
+    "expected_topics": [],
+    "test_case": "Caso limítrofe: redes neurais aplicadas"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-011",
+    "title": "A Cost Model for Cloud-Native Software Maintenance",
+    "authors": [
+      "Eduardo Martins",
+      "Grace Liu"
+    ],
+    "abstract": "We estimate the maintenance cost of cloud-native software systems using defect histories, change requests, and architecture metrics. The study proposes a model for software maintenance planning.",
+    "published_at": "2026-10-20T20:00:00+00:00",
+    "updated_at": "2026-10-20T20:00:00Z",
+    "categories": [
+      "cs.SE"
+    ],
+    "url": "https://example.org/fictitious/011",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "software_engineering"
+    ],
+    "test_case": "Manutenção e custos de software"
+  },
+  {
+    "arxiv_id": "TEST-FICTICIO-012",
+    "title": "Autonomous Agents for Adaptive Cybersecurity Response",
+    "authors": [
+      "Marta Silva",
+      "Noah Kim"
+    ],
+    "abstract": "Autonomous agents select defensive actions in response to simulated cyber incidents. A policy-learning method prioritizes alerts and adapts response strategies as new evidence arrives.",
+    "published_at": "2026-10-20T21:00:00+00:00",
+    "updated_at": "2026-10-20T21:00:00Z",
+    "categories": [
+      "cs.CR",
+      "cs.AI"
+    ],
+    "url": "https://example.org/fictitious/012",
+    "detected_at": "2026-10-29T12:00:00+00:00",
+    "expected_included": true,
+    "expected_topics": [
+      "intelligent_systems"
+    ],
+    "test_case": "Agentes autônomos"
+  }
+]
