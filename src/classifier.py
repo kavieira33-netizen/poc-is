@@ -148,8 +148,6 @@ def classify_article(article):
     relevant = bool(topics) and (
         software_score >= 1.5 or intelligent_score >= 1.5
     )
-        if not relevant:
-        logger.debug("Artigo rejeitado: score=%s, tópicos=%s", overall_score, topics)
     explanations = []
     if software_title:
         explanations.append("o título contém conceitos de Engenharia de Software: " + ", ".join(software_title))
