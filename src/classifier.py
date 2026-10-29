@@ -1,46 +1,43 @@
-
 import re
 import unicodedata
 
-
 SOFTWARE_TERMS = {
-    "software engineering": 2.0,
-    "software testing": 2.0,
-    "software maintenance": 2.0,
-    "requirements engineering": 2.0,
-    "program analysis": 1.5,
-    "bug detection": 1.5,
-    "software verification": 1.5,
-    "code generation": 1.0,
-    "software development": 1.0,
-    "programming languages": 1.0,
-    "continuous integration": 1.0,
-    "software architecture": 1.5,
-    "program repair": 1.5,
+    "engenharia de software": 2.0,
+    "teste de software": 2.0,
+    "manutenção de software": 2.0,
+    "engenharia de requisitos": 2.0,
+    "análise de programa": 1.5,
+    "detecção de bugs": 1.5,
+    "verificação de software": 1.5,
+    "geração de código": 1.0,
+    "desenvolvimento de software": 1.0,
+    "linguagens de programação": 1.0,
+    "integração contínua": 1.0,
+    "arquitetura de software": 1.5,
+    "reparo de programa": 1.5,
 }
 
 INTELLIGENT_TERMS = {
-    "intelligent agents": 2.0,
-    "vision-language agents": 2.0,
-    "multi-agent systems": 2.0,
-    "intelligent systems": 2.0,
-    "knowledge representation": 1.5,
-    "automated planning": 1.5,
-    "machine learning": 1.5,
-    "reasoning": 1.0,
-    "autonomous systems": 1.5,
-    "artificial intelligence": 1.0,
-    "neural networks": 1.0,
-    "reinforcement learning": 1.5,
-    "large language models": 1.5,
-    "vision-language": 1.5,
-    "ai agents": 1.5,
-    "intelligent agent": 1.5,
+    "agentes inteligentes": 2.0,
+    "agentes de visão-linguagem": 2.0,
+    "sistemas multiagentes": 2.0,
+    "sistemas inteligentes": 2.0,
+    "representação do conhecimento": 1.5,
+    "planejamento automatizado": 1.5,
+    "aprendizado de máquina": 1.5,
+    "raciocínio": 1.0,
+    "sistemas autônomos": 1.5,
+    "inteligência artificial": 1.0,
+    "redes neurais": 1.0,
+    "aprendizagem por reforço": 1.5,
+    "grandes modelos de linguagem": 1.5,
+    "linguagem visual": 1.5,
+    "agentes de IA": 1.5,
+    "agente inteligente": 1.5,
 }
 
 SOFTWARE_CATEGORIES = {"cs.SE", "cs.PL"}
 INTELLIGENT_CATEGORIES = {"cs.AI", "cs.MA", "cs.LG", "cs.RO"}
-
 
 def normalize(text):
     text = unicodedata.normalize("NFKD", text or "")
@@ -50,48 +47,38 @@ def normalize(text):
     )
     return re.sub(r"\s+", " ", text.lower()).strip()
 
-
 def find_matches(text, terms):
     """Return matching terms, prioritizing longer phrases."""
     matches = []
     occupied = []
-
     for term in sorted(terms, key=len, reverse=True):
-        for match in re.finditer(
-            rf"(?<!\w){re.escape(term)}(?!\w)", text
-        ):
+        for match in re.finditer(rf"(?<!\w){re.escape(term)}(?!\w)", text):
             start, end = match.span()
-
-            if any(start < old_end and end > old_start
-                   for old_start, old_end in occupied):
+            if any(start < old_end and end > old_start for old_start, old_end in occupied):
                 continue
-
             matches.append(term)
             occupied.append((start, end))
             break
-
     return matches
-
 
 def classify_article(article):
     title = normalize(article.get("title", ""))
     abstract = normalize(article.get("abstract", ""))
     categories = set(article.get("categories", []))
-
-    # The title receives more importance than a passing mention
-    # in the abstract.
+    
+    # O título recebe mais importância do que uma menção passageira no resumo.
     software_title = find_matches(title, SOFTWARE_TERMS)
     intelligent_title = find_matches(title, INTELLIGENT_TERMS)
-
+    
     software_abstract = find_matches(abstract, SOFTWARE_TERMS)
     intelligent_abstract = find_matches(abstract, INTELLIGENT_TERMS)
-
+    
     software_category = bool(categories & SOFTWARE_CATEGORIES)
     intelligent_category = bool(categories & INTELLIGENT_CATEGORIES)
-
+    
     software_evidence = software_title + software_abstract
     intelligent_evidence = intelligent_title + intelligent_abstract
-
+    
     software_strength = min(
         1.0,
         0.65 * bool(software_title)
@@ -104,21 +91,21 @@ def classify_article(article):
         + 0.25 * bool(intelligent_abstract)
         + 0.10 * intelligent_category,
     )
-
-    # Score the two areas separately, then calculate overall relevance.
+    
+    # Avalie as duas áreas separadamente e, em seguida, calcule a relevância geral.
     software_score = round(5 * software_strength, 1)
     intelligent_score = round(5 * intelligent_strength, 1)
-
+    
     intersection = (
         bool(software_title or software_abstract)
         and bool(intelligent_title or intelligent_abstract)
     )
-
+    
     overall_score = round(
         5 * (0.5 * software_strength + 0.5 * intelligent_strength),
         1,
     )
-
+    
     topics = []
     if software_strength >= 0.30:
         topics.append("software_engineering")
@@ -126,40 +113,27 @@ def classify_article(article):
         topics.append("intelligent_systems")
     if intersection:
         topics.append("intersection")
-
-    # The general monitor includes articles relevant to either area.
-    # The intersection label requires evidence for both areas.
+        
+    # O monitor geral includes artigos relevantes para ambas as áreas.
+    # A etiqueta de intersecção requer evidências para ambas as áreas.
     relevant = bool(topics) and overall_score >= 1.5
-
+    
     explanations = []
-
     if software_title:
-        explanations.append(
-            "o título contém conceitos de Engenharia de Software: "
-            + ", ".join(software_title)
-        )
+        explanations.append("o título contém conceitos de Engenharia de Software: " + ", ".join(software_title))
     elif software_abstract:
-        explanations.append(
-            "o resumo contém conceitos de Engenharia de Software: "
-            + ", ".join(software_abstract)
-        )
-
+        explanations.append("o resumo contém conceitos de Engenharia de Software: " + ", ".join(software_abstract))
+        
     if intelligent_title:
-        explanations.append(
-            "o título contém conceitos de Sistemas Inteligentes: "
-            + ", ".join(intelligent_title)
-        )
+        explanations.append("o título contém conceitos de Sistemas Inteligentes: " + ", ".join(intelligent_title))
     elif intelligent_abstract:
-        explanations.append(
-            "o resumo contém conceitos de Sistemas Inteligentes: "
-            + ", ".join(intelligent_abstract)
-        )
-
+        explanations.append("o resumo contém conceitos de Sistemas Inteligentes: " + ", ".join(intelligent_abstract))
+        
     if software_category:
-        explanations.append("há evidência adicional na categoria cs.SE/cs.PL")
+        explanations.append("há evidências adicionais na categoria cs.SE/cs.PL")
     if intelligent_category:
-        explanations.append("há evidência adicional em categorias de IA")
-
+        explanations.append("há evidências adicionais em categorias de IA")
+        
     if relevant and explanations:
         justification = (
             "Selecionado por evidências temáticas. "
@@ -167,28 +141,20 @@ def classify_article(article):
             + f". Aderência a Engenharia de Software: {software_score}/5."
             + f" Aderência a Sistemas Inteligentes: {intelligent_score}/5."
             + (
-                " Há evidência textual das duas áreas."
+                " Embasamento textual das duas áreas."
                 if intersection
                 else " A interseção entre as duas áreas não foi confirmada."
             )
         )
     else:
-        justification = (
-            "Não selecionado: evidência insuficiente de aderência "
-            "às áreas configuradas."
-        )
-
+        justification = "Não selecionado: evidência insuficiente de eficácia às áreas configuradas."
+        
     return {
         **article,
-        "relevance_score": overall_score,
-        "software_engineering_score": software_score,
-        "intelligent_systems_score": intelligent_score,
-        "matched_topics": topics,
+        "pontuação_de_relevância": overall_score,
+        "pontuação_de_engenharia_de_software": software_score,
+        "pontuação_de_sistemas_inteligentes": intelligent_score,
+        "tópicos_correspondentes": topics,
         "justification": justification,
-        "included": relevant,
-    }
-        "relevance_score": score,
-        "matched_topics": topics,
-        "justification": justification,
-        "included": relevant,
+        "incluído": relevant,
     }
