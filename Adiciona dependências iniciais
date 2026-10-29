@@ -1,0 +1,142 @@
+
+import re
+import unicodedata
+
+
+SOFTWARE_TERMS = {
+    "software engineering": 2.0,
+    "software testing": 2.0,
+    "program analysis": 1.5,
+    "bug detection": 1.5,
+    "software maintenance": 1.5,
+    "requirements engineering": 1.5,
+    "code generation": 1.5,
+    "software verification": 1.5,
+    "software development": 1.0,
+    "programming languages": 1.0,
+    "continuous integration": 1.0,
+}
+
+INTELLIGENT_TERMS = {
+    "intelligent agents": 2.0,
+    "multi-agent systems": 2.0,
+    "knowledge representation": 1.5,
+    "automated planning": 1.5,
+    "machine learning": 1.5,
+    "reasoning": 1.0,
+    "autonomous systems": 1.5,
+    "artificial intelligence": 1.0,
+    "neural networks": 1.0,
+    "intelligent systems": 2.0,
+}
+
+SOFTWARE_CATEGORIES = {"cs.SE", "cs.PL"}
+INTELLIGENT_CATEGORIES = {"cs.AI", "cs.MA", "cs.LG", "cs.RO"}
+
+
+def normalize(text):
+    """Normalize text for case- and accent-insensitive matching."""
+    text = unicodedata.normalize("NFKD", text or "")
+    text = "".join(c for c in text if not unicodedata.combining(c))
+    return re.sub(r"\s+", " ", text.lower()).strip()
+
+
+def classify_article(article):
+    """
+    Classify an article using transparent rules.
+
+    Expected fields:
+      title, abstract, categories
+
+    Returns the original metadata plus score, topics and justification.
+    """
+    title = normalize(article.get("title", ""))
+    abstract = normalize(article.get("abstract", ""))
+    categories = set(article.get("categories", []))
+    full_text = f"{title} {abstract}"
+
+    software_matches = [
+        term for term in SOFTWARE_TERMS
+        if term in full_text
+    ]
+    intelligent_matches = [
+        term for term in INTELLIGENT_TERMS
+        if term in full_text
+    ]
+
+    software_score = min(
+        2.0,
+        sum(SOFTWARE_TERMS[t] for t in software_matches) / 2.0
+    )
+    intelligent_score = min(
+        2.0,
+        sum(INTELLIGENT_TERMS[t] for t in intelligent_matches) / 2.0
+    )
+
+    software_category_match = bool(categories & SOFTWARE_CATEGORIES)
+    intelligent_category_match = bool(categories & INTELLIGENT_CATEGORIES)
+
+    category_score = 0.5 * (
+        int(software_category_match) + int(intelligent_category_match)
+    )
+
+    intersection_score = (
+        1.0
+        if software_matches and intelligent_matches
+        else 0.0
+    )
+
+    technical_score = (
+        1.0
+        if software_matches or intelligent_matches
+        else 0.0
+    )
+
+    score = round(min(
+        5.0,
+        software_score / 2.0
+        + intelligent_score / 2.0
+        + category_score
+        + technical_score
+        + intersection_score
+    ), 1)
+
+    topics = []
+    if software_matches or software_category_match:
+        topics.append("software_engineering")
+    if intelligent_matches or intelligent_category_match:
+        topics.append("intelligent_systems")
+    if software_matches and intelligent_matches:
+        topics.append("intersection")
+
+    relevant = bool(topics) and score >= 2.0
+
+    reasons = []
+    if software_matches:
+        reasons.append(
+            "termos de Engenharia de Software: "
+            + ", ".join(software_matches)
+        )
+    if intelligent_matches:
+        reasons.append(
+            "termos de Sistemas Inteligentes: "
+            + ", ".join(intelligent_matches)
+        )
+    if software_category_match:
+        reasons.append("categoria de Engenharia de Software ou programação")
+    if intelligent_category_match:
+        reasons.append("categoria de Sistemas Inteligentes")
+
+    justification = (
+        "Artigo selecionado: " + "; ".join(reasons) + "."
+        if relevant
+        else "Baixa aderência aos critérios temáticos configurados."
+    )
+
+    return {
+        **article,
+        "relevance_score": score,
+        "matched_topics": topics,
+        "justification": justification,
+        "included": relevant,
+    }
