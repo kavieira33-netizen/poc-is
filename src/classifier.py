@@ -124,9 +124,8 @@ def classify_article(article):
     intelligent_score = round(5 * intelligent_strength, 1)
     
     intersection = (
-        bool(software_title or software_abstract)
-        and bool(intelligent_title or intelligent_abstract)
-    )
+    "software_engineering" in topics
+    and "intelligent_systems" in topics)
     
     overall_score = round(
     max(software_score, intelligent_score),
