@@ -11,95 +11,146 @@ from src.classifier import classify_article
 
 
 API_URL = "https://export.arxiv.org/api/query"
-CATEGORIES = ["cs.SE", "cs.AI", "cs.MA", "cs.LG", "cs.PL", "cs.RO"]
+
+CATEGORIES = [
+    "cs.SE",
+    "cs.AI",
+    "cs.MA",
+    "cs.LG",
+    "cs.PL",
+    "cs.RO",
+]
+
 LOOKBACK_DAYS = 7
-MAX_RESULTS = 100
+MAX_RESULTS_PER_CATEGORY = 100
+REQUEST_INTERVAL_SECONDS = 3
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def collect_articles():
-    """Fetch recent arXiv papers and classify their relevance."""
-    category_query = " OR ".join(
-        f"cat:{category}" for category in CATEGORIES
-    )
+    """Fetch recent arXiv papers by category and classify their relevance."""
 
-    params = {
-        "search_query": f"({category_query})",
-        "start": 0,
-        "max_results": MAX_RESULTS,
-        "sortBy": "submittedDate",
-        "sortOrder": "descending",
-    }
-
-    response = requests.get(
-        API_URL,
-        params=params,
-        timeout=60,
-        headers={"User-Agent": "arxiv-monitor/1.0"},
-    )
-    response.raise_for_status()
-
-    feed = feedparser.parse(response.content)
-    logger.info("Articles received from arXiv: %d", len(feed.entries))
-    
     cutoff = datetime.now(timezone.utc) - timedelta(
         days=LOOKBACK_DAYS
     )
 
-    articles = []
-    seen_ids = set()
+    articles_by_id = {}
 
-    for entry in feed.entries:
-        published = datetime(*entry.published_parsed[:6],
-                             tzinfo=timezone.utc)
+    for index, category in enumerate(CATEGORIES):
 
-        # Keep only papers first published within the lookback window.
-        if published < cutoff:
-            continue
+        logger.info("Searching arXiv category: %s", category)
 
-        article_id = urlparse(entry.id).path.split("/abs/")[-1]
-
-        # Ignore duplicate IDs returned by overlapping categories.
-        if article_id in seen_ids:
-            continue
-        seen_ids.add(article_id)
-
-        article = {
-            "arxiv_id": article_id,
-            "title": " ".join(entry.title.split()),
-            "authors": [
-                author.name for author in entry.get("authors", [])
-            ],
-            "abstract": " ".join(entry.summary.split()),
-            "published_at": published.isoformat(),
-            "updated_at": entry.get("updated", ""),
-            "categories": [
-                tag.term for tag in entry.get("tags", [])
-            ],
-            "url": entry.link,
-            "detected_at": datetime.now(timezone.utc).isoformat(),
+        params = {
+            "search_query": f"cat:{category}",
+            "start": 0,
+            "max_results": MAX_RESULTS_PER_CATEGORY,
+            "sortBy": "submittedDate",
+            "sortOrder": "descending",
         }
 
-        classified = classify_article(article)
+        response = requests.get(
+            API_URL,
+            params=params,
+            timeout=60,
+            headers={"User-Agent": "arxiv-monitor/1.0"},
+        )
+        response.raise_for_status()
 
-        # Preserva todos os artigos classificados para os relatórios.
-        # O status define se serão incluídos, revisados ou excluídos.
-        articles.append(classified)
+        feed = feedparser.parse(response.content)
 
-    logger.info("Relevant articles found: %d", len(articles))
+        logger.info(
+            "Articles received from %s: %d",
+            category,
+            len(feed.entries),
+        )
+
+        for entry in feed.entries:
+
+            if not entry.get("published_parsed"):
+                continue
+
+            published = datetime(
+                *entry.published_parsed[:6],
+                tzinfo=timezone.utc,
+            )
+
+            if published < cutoff:
+                continue
+
+            article_id = urlparse(entry.id).path.split(
+                "/abs/"
+            )[-1]
+
+            if article_id in articles_by_id:
+                continue
+
+            article = {
+                "arxiv_id": article_id,
+                "title": " ".join(entry.title.split()),
+                "authors": [
+                    author.name
+                    for author in entry.get("authors", [])
+                ],
+                "abstract": " ".join(entry.summary.split()),
+                "published_at": published.isoformat(),
+                "updated_at": entry.get("updated", ""),
+                "categories": [
+                    tag.term for tag in entry.get("tags", [])
+                ],
+                "url": entry.link,
+                "detected_at": datetime.now(
+                    timezone.utc
+                ).isoformat(),
+            }
+
+            classified = classify_article(article)
+
+            # Preserve all classified records for the reports.
+            articles_by_id[article_id] = classified
+
+        # Respect the API interval between category requests.
+        if index < len(CATEGORIES) - 1:
+            time.sleep(REQUEST_INTERVAL_SECONDS)
+
+    articles = list(articles_by_id.values())
+
+    articles.sort(
+        key=lambda article: article["published_at"],
+        reverse=True,
+    )
+
+    status_counts = {
+        "included": 0,
+        "review": 0,
+        "excluded": 0,
+    }
+
+    for article in articles:
+        status = article.get("classification_status", "excluded")
+        if status in status_counts:
+            status_counts[status] += 1
+
+    logger.info("Unique articles collected: %d", len(articles))
+    logger.info("Included automatically: %d", status_counts["included"])
+    logger.info("Pending human review: %d", status_counts["review"])
+    logger.info("Excluded: %d", status_counts["excluded"])
+
     return articles
 
 
 if __name__ == "__main__":
     try:
         results = collect_articles()
+
         for article in results:
             print(
                 f'{article["relevance_score"]}/5 | '
+                f'{article["classification_status"]} | '
                 f'{article["title"]} | {article["url"]}'
             )
+
     except (requests.RequestException, ValueError) as exc:
         logger.error("Collection failed: %s", exc)
         raise
