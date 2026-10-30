@@ -84,8 +84,9 @@ def collect_articles():
 
         classified = classify_article(article)
 
-        if classified["included"]:
-            articles.append(classified)
+        # Preserva todos os artigos classificados para os relatórios.
+        # O status define se serão incluídos, revisados ou excluídos.
+        articles.append(classified)
 
     logger.info("Relevant articles found: %d", len(articles))
     return articles
