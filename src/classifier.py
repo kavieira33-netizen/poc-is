@@ -78,14 +78,33 @@ def find_matches(text, terms):
     """Return matching terms, prioritizing longer phrases."""
     matches = []
     occupied = []
-    for term in sorted(terms, key=len, reverse=True):
-        for match in re.finditer(rf"(?<!\w){re.escape(term)}(?!\w)", text):
+
+    normalized_terms = [
+        (normalize(term), term)
+        for term in terms
+    ]
+
+    for normalized_term, original_term in sorted(
+        normalized_terms,
+        key=lambda item: len(item[0]),
+        reverse=True,
+    ):
+        for match in re.finditer(
+            rf"(?<!\w){re.escape(normalized_term)}(?!\w)",
+            text,
+        ):
             start, end = match.span()
-            if any(start < old_end and end > old_start for old_start, old_end in occupied):
+
+            if any(
+                start < old_end and end > old_start
+                for old_start, old_end in occupied
+            ):
                 continue
-            matches.append(term)
+
+            matches.append(original_term)
             occupied.append((start, end))
             break
+
     return matches
 
 def classify_article(article):
