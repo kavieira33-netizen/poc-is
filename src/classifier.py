@@ -450,10 +450,9 @@ def classify_article(article):
 
     # Identificação de evidência parcial.
     any_evidence = (
-        software["has_any_evidence"]
-        or intelligent["has_any_evidence"]
-    )
-
+    software["score"] >= 1.0
+    or intelligent["score"] >= 1.0
+)
     # Status: incluído, revisão ou excluído.
     if software_confirmed or intelligent_confirmed:
         status = "included"
