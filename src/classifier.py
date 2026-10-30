@@ -28,6 +28,13 @@ SOFTWARE_TERMS = {
     "continuous integration": 1.0,
     "software architecture": 1.5,
     "program repair": 1.5,
+    "mutation testing": 2.0,
+    "microservice architectures": 1.5,
+    "test suite": 1.0,
+    "code review": 2.0,
+    "defect detection": 1.5,
+    "test case generation": 2.0,
+    "bug localization": 1.5,
 
 }
 
@@ -61,6 +68,11 @@ INTELLIGENT_TERMS = {
     "AI agents": 1.5,
     "agentes autônomos": 2.0,
     "autonomous agents": 2.0,
+    "AI-assisted": 1.5,
+    "AI-assisted code review": 2.0,
+    "explainable AI": 1.5,
+    "large language model agents": 2.0,
+    "language model agents": 2.0,
 }
 
 SOFTWARE_CATEGORIES = {"cs.SE", "cs.PL"}
