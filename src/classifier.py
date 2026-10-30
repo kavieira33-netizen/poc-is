@@ -122,7 +122,11 @@ def classify_article(article):
     # Avalie as duas áreas separadamente e, em seguida, calcule a relevância geral.
     software_score = round(5 * software_strength, 1)
     intelligent_score = round(5 * intelligent_strength, 1)
-    
+
+    overall_score = round(
+        max(software_score, intelligent_score),
+        1,
+    )
     topics = []
 
     if software_strength >= 0.30:
