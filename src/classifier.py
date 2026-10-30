@@ -105,13 +105,37 @@ def normalize(text):
     return re.sub(r"\s+", " ", text.lower()).strip()
 
 
+
 def find_matches(text, terms):
     """
-    Localiza termos no texto.
-    Prioriza expressões mais longas para evitar duplicidade.
+    Localiza termos no texto, priorizando expressões longas.
+    Ignora ocorrências negadas no contexto imediatamente anterior.
     """
     matches = []
     occupied = []
+
+    negations = [
+        "not",
+        "no",
+        "never",
+        "without",
+        "does not",
+        "do not",
+        "did not",
+        "doesn't",
+        "don't",
+        "is not",
+        "are not",
+        "was not",
+        "were not",
+        "isn't",
+        "aren't",
+        "wasn't",
+        "weren't",
+        "nao",
+        "nunca",
+        "sem",
+    ]
 
     normalized_terms = [
         (normalize(term), term)
@@ -133,6 +157,32 @@ def find_matches(text, terms):
                 start < old_end and end > old_start
                 for old_start, old_end in occupied
             ):
+                continue
+
+            # Analisa o contexto anterior, limitado à mesma frase.
+            context_start = max(
+                text.rfind(".", 0, start),
+                text.rfind(";", 0, start),
+                text.rfind("!", 0, start),
+                text.rfind("?", 0, start),
+                text.rfind(",", 0, start),
+            ) + 1
+
+            previous_context = text[context_start:start].strip()
+
+            # Ignora a ocorrência quando houver negação próxima.
+            words_before = previous_context.split()[-8:]
+            context_to_check = " ".join(words_before)
+
+            is_negated = any(
+                re.search(
+                    rf"(?<!\w){re.escape(negation)}(?!\w)",
+                    context_to_check,
+                )
+                for negation in negations
+            )
+
+            if is_negated:
                 continue
 
             matches.append(original_term)
