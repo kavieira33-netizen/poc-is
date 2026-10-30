@@ -238,6 +238,10 @@ INTELLIGENT_TERMS = {
     "cognitive architectures": 1.5,
     "arquiteturas cognitivas": 1.5,
     "intelligent decision-making": 1.5,
+    "AI-assisted code review": 2.0,
+    "revisao de codigo assistida por IA": 2.0,
+    "sistemas especialistas": 1.5,
+    "expert systems": 1.5,
     "sistemas especialistas": 1.5,
     "expert systems": 1.5,
 }
